@@ -1,0 +1,39 @@
+<paper-toast #toastSuccesRegister id="toastSuccesRegister" class="fit-bottom" text="Falla registro de Proveedor" duration="0" style="font-size: x-large;" >
+    <paper-button onclick="toastSuccesRegister.toggle()" style="text-transform: none;color: #eeff41;">Cerrar</paper-button>
+</paper-toast>
+<paper-toast #toastErrorRegister id="toastErrorRegister" class="fit-bottom" text="Registro realizado con éxito" duration="0" style="font-size: x-large;" >
+    <paper-button onclick="toastErrorRegister.toggle()" style="text-transform: none;color: #eeff41;">Cerrar</paper-button>
+</paper-toast>
+
+<div >
+    <div class="row text-center" style="    margin-top: 100px;">
+        <h2>Proveedores</h2>
+        <h4>Registro</h4>
+        <h1>{{a_rfc}}</h1>
+    </div>
+    <div class="row text-center" >
+        <iron-image src="assets/img/logo-cimav-medio.png" ></iron-image>
+    </div>
+
+    <div class="col-md-4 col-lg-offset-4" >
+        <form #registroForm="ngForm"  (ngSubmit)="onSubmit()"  novalidate >
+            <div class="row">
+                <paper-input (change)="rfcOnChange($event)" id="rfc-paper-input" pattern="^([A-ZÑ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$"  label="RFC" char-counter maxlength="13" minlength="10" required auto-validate error-message="El RFC debe ser valido" name="rfc"  [(ngModel)]="proveedorModel.rfc"></paper-input>
+            </div>
+            <div class="row">
+                <paper-input id="razon-social-id"  label="Razón social" char-counter maxlength="140" minlength="5" required auto-validate error-message="Requiere la razón social" name="razon"  [(ngModel)]="proveedorModel.razon_social"></paper-input>
+            </div>
+            <div class="row">
+                <paper-input  pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" type="password"  label="Password" required char-counter maxlength="40" minlength="8" auto-validate error-message="Mayúsculas, minúsculas, números y mínimo 8 caracteres" name="password"  [(ngModel)]="proveedorModel.password"></paper-input>
+            </div>
+            <div class="row" style="float: right; margin-top: 15px;">
+                <paper-button class=" indigo" [disabled]="loading"  (click)="registroForm.ngSubmit.emit();" raised>Registrar</paper-button>
+
+                <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                <a [routerLink]="['/login']" class="btn btn-link">Cancelar</a>
+
+            </div>
+        </form>
+    </div>
+
+</div>

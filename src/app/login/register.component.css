@@ -1,0 +1,30 @@
+
+
+paper-radio-button, paper-checkbox{
+    font-size: large;
+    padding-top: 10px;
+}
+
+.align-right {
+    text-align: right;
+}
+
+paper-fab {
+    margin-left: 3px;
+}
+paper-fab.indigo {
+    background-color: var(--paper-indigo-500);
+    color: white;
+}
+
+paper-button.indigo {
+    background-color: var(--paper-indigo-500);
+    color: white;
+}
+paper-fab[disabled]{
+    background-color: var(--paper-grey-100) !important;
+    color: white;
+}
+paper-fab.custom:hover {
+    background-color: var(--paper-indigo-100);
+}

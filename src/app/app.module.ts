@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import {AlertComponent} from "./_directives/alert.component";
 import {HomeComponent} from "./home/home.component";
 import {LoginComponent} from "./login/login.component";
-//import {RegisterComponent} from "./register/register.component";
 import {AppConfig} from "./app.config";
 import {AuthGuard} from "./_guards/auth.guard";
 import {AlertService} from "./_services/alert.service";
@@ -21,6 +20,7 @@ import {CategoriaPipe} from "./home/CategoriaPipe";
 import { FileSelectDirective } from 'ng2-file-upload';
 import {UploaderComponent} from "./home/uploader.component";
 import {DocumentoPipe} from "./home/DocumentoPipe";
+import {RegisterComponent} from "./login/register.component";
 
 @NgModule({
   declarations: [
@@ -28,8 +28,8 @@ import {DocumentoPipe} from "./home/DocumentoPipe";
     AlertComponent,
     HomeComponent,
     LoginComponent,
-      UploaderComponent,
-//    RegisterComponent,
+    UploaderComponent,
+    RegisterComponent,
 
     PolymerElement('app-header-layout'),
     PolymerElement('app-header'),

@@ -10,6 +10,12 @@ export class AuthGuard implements CanActivate {
     constructor(private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+
+        if (state.url.indexOf('register') > 0) {
+            // si es para el registro; puede pasar
+            return true;
+        }
+
         if (localStorage.getItem('currentProveedor')) {
             // 2> si hay un currentProveedor en el localStorage, se lo permite
             return true;

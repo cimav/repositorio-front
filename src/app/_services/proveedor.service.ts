@@ -49,10 +49,33 @@ export class ProveedorService {
             });
     }
 
+    /*
     create(proveedor: Proveedor) {
         return this.http.post(this.config.apiUrl + '/proveedores/register', proveedor, this.jwt());
     }
+    */
+    public create = (proveedor: Proveedor): Observable<Proveedor> => {
+        let toAdd = JSON.stringify(proveedor, this.replacer);
+        return this.http.post(this.config.apiUrl + '/proveedores/', toAdd,  this.jwt())
+            .map((response: Response) => {
+                return <Proveedor>response.json();
+            });
+        //.catch(this.handleError);
+    }
 
+    /*
+    public Add = (justificacion: Justificacion): Observable<Justificacion> => {
+        let toAdd = JSON.stringify(justificacion, this.replacer);
+        return this._http.post(this.constants.JUSTIFICACION_ADD_URL, toAdd, { headers: this.headers })
+            .map((response: Response) => <Justificacion>response.json());
+    }
+    */
+    replacer(key,value) {
+        if (key=="type") {
+            return undefined;
+        }
+        return value;
+    }
     update(proveedor: Proveedor) {
         return this.http.put(this.config.apiUrl + '/proveedores/' + proveedor.id, proveedor, this.jwt());
     }
