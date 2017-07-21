@@ -1,0 +1,297 @@
+<!--
+<div class="col-md-6 col-md-offset-3">
+    <h1>This is HomeComponent</h1>
+    <h1 *ngIf="currentProveedor">Hi {{currentProveedor.rfc}}! - {{currentProveedor.razon_social}} </h1>
+    <p>You're logged in with the MEAN Stack & Angular 2!!</p>
+    <h3>All registered users:</h3>
+    <ul>
+        <li *ngFor="let proveedor of proveedores">
+            {{proveedor.id}} [{{proveedor.rfc}}] {{proveedor.razonSocial}}
+            >> <button (click)="loadProveedorByRfc(proveedor.rfc)">Carga</button>
+        </li>
+    </ul>
+    <p><a [routerLink]="['/login']">Logout</a></p>
+</div>
+
+-->
+
+<!--
+<paper-toast #toastUpdated id="toastUpdated" text="Justificación guardada" ></paper-toast>
+-->
+
+<paper-dialog id="confirmarDeleteDlg" modal>
+    <h2>Eliminar documento</h2>
+    <div><p>¿Eliminar documento: <strong>{{documentoToDelete?.file}}</strong>?</p></div>
+    <div class="buttons">
+        <paper-button dialog-dismiss>Cancelar</paper-button>
+        <paper-button dialog-confirm autofocus (click)="deleteDocumentoSrv(documentoToDelete?.id)">Aceptar</paper-button>
+    </div>
+</paper-dialog>
+
+<paper-toast #toastUploaded id="toastUploaded" text="Documento cargado"></paper-toast>
+<paper-toast #toastDeleted id="toastDeleted" text="Documento eliminado"></paper-toast>
+<paper-toast #toastDownloaded id="toastDownloaded" text="Documento descargado"></paper-toast>
+<paper-toast #toastCanceled id="toastCanceled" text="Documento cancelado"></paper-toast>
+
+<app-drawer-layout fullbleed>
+
+    <app-header-layout has-scrolling-region style="background-color: #F2FAF9;">
+        <app-header fixed condenses effects="waterfall">
+            <app-toolbar>
+
+                <iron-image src="assets/img/logo-cimav.png"></iron-image>
+
+                <div main-title>Proveedores
+                    <div style="color: #80CBC4;" *ngIf="currentProveedor">{{currentProveedor.rfc}} <span style="font-size: small; padding-left: 10px;">{{currentProveedor.razon_social}}</span></div>
+                </div>
+
+                <p><a [routerLink]="['/login']" style="color: white;">Logout</a></p>
+
+                <!--
+                <paper-progress value="100" bottom-item style="width: 100%; "></paper-progress>
+                -->
+            </app-toolbar>
+        </app-header>
+
+
+        <paper-tabs id="theTabs" selected={{tab_selected}} on-iron-select="onTabSelect($event)">
+            <paper-tab>Facturas</paper-tab>
+            <paper-tab>Documentos</paper-tab>
+        </paper-tabs>
+
+        <div class="row">
+            <iron-pages class="col-md-10 col-lg-offset-1" *ngIf="currentProveedor" id="thePages" selected={{tab_selected}}>
+
+                <!-- Facturas Tab -->
+                <div id="facturas_tab_id">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="panel-title">Agregar facturas</span>
+                            <paper-tooltip position="bottom" for="seleccionar-factura-btn" offset="0">Buscar y seleccionar el o los documentos (XML/PDF) a subir</paper-tooltip>
+                            <paper-button raised id="seleccionar-factura-btn" onclick="document.querySelector('#uploader_factura_id').click();">
+                                <iron-icon icon="search"></iron-icon>
+                                Seleccionar
+                            </paper-button>
+                        </div>
+                        <div class="panel-body">
+
+                            <form  #facturaForm="ngForm" (ngModelChange)="onChangeForm($event)" >
+
+                                <input id="uploader_factura_id" type="file" multiple ng2FileSelect [uploader]="uploaderFactura" accept=".xml, .pdf"/>
+
+                                <paper-item  class="group-item"> <!-- *ngIf="uploaderFactura.queue.length>0" -->
+                                    <!--
+                                    <label for="orden_id">Orden de compra</label>
+                                    <input [(ngModel)]="ordenCompra" [disabled]="uploaderFactura.queue.length<=0" type="text" id="orden_id" name="orden" pattern="^[\w.-]+$" title="Acepta letras, números, '-', '_' y sin espacios"
+                                       style="margin-left: 5px; width: 40%;">
+                                       -->
+                                    <paper-input id="inputOrden" [(ngModel)]="ordenCompra" name="ordenCompra" label="Orden de compra"  pattern="[\w]+" maxlength="40" minlength="2"
+                                             error-message="Acepta dígitos y letras sin espacios. E.g. 1A170005" required auto-validate="true"
+                                             style="max-width: 400px;"
+                                    ></paper-input> <!-- [attr.disabled]="uploaderFactura.queue.length<=0" -->
+                                </paper-item>
+
+                            </form>
+
+                            <paper-item class="group-item" *ngFor="let item of uploaderFactura.queue; let idx = index">
+                                <code>{{item?.file?.type?.split('/')[1]?.toUpperCase()}}</code>
+                                <span class="primary">{{item?.file?.name}}</span>
+                                <span class="secondary" style="top:-8px;     position: relative;">
+                                    <paper-icon-button class="btn-depende-orden" [attr.id]="'upload-factura-btn-id-' + idx" [disabled]=!facturaForm.form.valid icon="cloud-upload" style="color: #7a7a7a;" (click)="uploadFacturaItem(item)"></paper-icon-button>
+                                    <paper-icon-button [attr.id]="'cancelar-factura-btn-id-' + idx" icon="clear" style="color: #7a7a7a;" (click)="item.remove()" ></paper-icon-button>
+                                </span>
+                            </paper-item>
+
+                        </div>
+                        <div class="panel-footer">
+                            <ul class="ul-ayuda">
+                                <li>Utilice el botón <iron-icon icon="search"></iron-icon><strong>SELLECIONAR</strong> para buscar y seleccionar los archivos <strong>XML</strong> y <strong>PDF</strong> correspondientes a la factura a subir</li>
+                                <li>Capture la <strong>Orden de Compra</strong> correspondiente a la factura (e.g. 1A171036)</li>
+                                <li>A cada archivo <strong>XML</strong> le debe corresponder un archivo <strong>PDF</strong></li>
+                                <li>Se despliega una lista de archivos (facturas) listos para subir y todos correspondientes a la misma orden capturada</li>
+                                <li>Las <strong>Ordenes</strong> pueden ser parciales; es decir, tener más de una factura</li>
+                                <li>Utilice el icono <iron-icon icon="cloud-upload"></iron-icon> para subir el archivo</li>
+                                <li>Utilice el icono <iron-icon icon="clear"></iron-icon> para cancelar el archivo</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div *ngFor="let cat_id of [50]">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <span class="panel-title">Facturas</span>
+                            </div>
+                            <div class="panel-body">
+                                <paper-item class="group-item" *ngFor="let docu of currentProveedor.documentos | DocumentoPipe:cat_id; let idx = index">
+                                    <code style="white-space: pre;">{{formatOrdenCompra(docu.orden_compra)}}</code>
+                                    <code *ngIf="docu.file.toLowerCase().indexOf('.xml')>0"><strong>XML</strong></code>
+                                    <code *ngIf="docu.file.toLowerCase().indexOf('.pdf')>0">PDF</code>
+                                    <span class="primary">{{docu.file}}</span>
+                                    <span class="secondary" style="top:-8px;     position: relative;">
+                                        <paper-tooltip position="top" [attr.for]="'download-btn-id-' + cat_id + '-' + idx" offset="0">Bajar el documento desde el repositorio al disco local</paper-tooltip>
+                                        <paper-icon-button [attr.id]="'download-btn-id-' + cat_id + '-' +  idx" icon="file-download" style="color: #7a7a7a;"
+                                                           (click)="download(docu)"></paper-icon-button>
+                                        <paper-tooltip position="top" [attr.for]="'delete-btn-id-' + cat_id + '-' + idx"
+                                                       offset="0">Eliminar el documento del repositorio</paper-tooltip>
+                                        <paper-icon-button [attr.id]="'delete-btn-id-' + cat_id + '-' + idx" icon="delete" style="color: #7a7a7a;"
+                                                           (click)="deleteDocumentoDlg(docu)"></paper-icon-button>
+                                    </span>
+                                    <span class="secondary"><iron-time datetime="{{docu.updated_at}}" format="dd/mmm/yyyy"></iron-time></span>
+                                </paper-item>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- -------------- -->
+                <!-- Documentos Tab -->
+
+                <div id="documentos_tab_id" *ngIf="currentProveedor">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="panel-title">Agregar documento</span>
+                            <paper-tooltip position="top" for="seleccionar-btn" offset="0">Buscar y seleccionar el o los documentos a subir</paper-tooltip>
+                            <paper-button raised id="seleccionar-btn" onclick="document.querySelector('#uploader_id').click();">
+                                <iron-icon icon="search"></iron-icon>
+                                Seleccionar
+                            </paper-button>
+                        </div>
+                        <div class="panel-body">
+
+                            <input id="uploader_id" type="file" multiple ng2FileSelect [uploader]="uploader" accept=".xml,.txt,.jpg,.jpeg,.gif,.png,.pdf,.doc,.docx,.xls,.xlsx"/>
+
+                            <paper-item class="group-item" *ngFor="let item of uploader.queue; let idx = index">
+                                <span class="primary">{{item?.file?.name}}</span>
+                                <span class="secondary" style="top:-8px;     position: relative;">
+                                    <select [attr.id]="'categoria_id_' + idx" class="xxform-control" required> <!-- [(ngModel)]="categorias[i]"  -->
+                                        <option *ngFor="let catego of categorias | slice:0:(categorias.length-1)" [value]="catego.id">{{catego.categoria}}</option>
+                                    </select>
+                                    <paper-icon-button [attr.id]="'upload-btn-id-' + idx" icon="cloud-upload" style="color: #7a7a7a;" (click)="uploadItem('categoria_id_' + idx, item)"></paper-icon-button>
+                                    <paper-icon-button [attr.id]="'cancelar-btn-id-' + idx" icon="clear" style="color: #7a7a7a;" (click)="item.remove()" onclick="document.querySelector('#toastCanceled').show();"></paper-icon-button>
+
+                                    <paper-tooltip position="top" [attr.for]="'categoria_id_' + idx" offset="0">Seleccionar la categoría del documento</paper-tooltip>
+                                    <paper-tooltip position="top" [attr.for]="'cancelar-btn-id-' + idx" offset="0">Cancelar el documento (no subirlo al repositorio)</paper-tooltip>
+                                    <paper-tooltip position="top" [attr.for]="'upload-btn-id-' + idx" offset="0">Subir el documento al repositorio</paper-tooltip>
+                                </span>
+                            </paper-item>
+
+                        </div>
+                        <div class="panel-footer">
+                            <ul class="ul-ayuda">
+                                <li>Utilice el botón <iron-icon icon="search"></iron-icon><strong>SELLECIONAR</strong> para buscar y seleccionar los archivos/documentos a subir</li>
+                                <li>Se despliega una lista de archivos/documentos listos para subir</li>
+                                <li>Por cada archivo seleccione su tipo (e.g 'Acta Constitutiva')</li>
+                                <li>Utilice el icono <iron-icon icon="cloud-upload"></iron-icon> para subir el archivo</li>
+                                <li>Utilice el icono <iron-icon icon="clear"></iron-icon> para cancelar el archivo</li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="panel-title">Documentos</span>
+                        </div>
+                        <div class="panel-body">
+                            <div *ngFor="let cat_id of [1,2,3]">
+                                <paper-item class="group-item">
+                                    <code>{{txtCatego(cat_id)}}</code>
+                                </paper-item>
+
+                                <paper-item class="group-item" *ngFor="let docu of currentProveedor.documentos | DocumentoPipe:cat_id; let idx = index">
+                                    <div class="col-sm-offset-0" style="padding-left: 30px;">
+                                        <span class="primary">{{docu.file}}</span>
+                                        <span class="secondary" style="top:-8px;     position: relative;">
+                                            <paper-tooltip position="top" [attr.for]="'download-btn-id-' + cat_id + '-' + idx" offset="0">Bajar el documento desde el repositorio al disco local</paper-tooltip>
+                                            <paper-icon-button [attr.id]="'download-btn-id-' + cat_id + '-' +  idx" icon="file-download" style="color: #7a7a7a;"
+                                                           (click)="download(docu)"></paper-icon-button>
+                                            <paper-tooltip position="top" [attr.for]="'delete-btn-id-' + cat_id + '-' + idx"
+                                                       offset="0">Eliminar el documento del repositorio</paper-tooltip>
+                                            <paper-icon-button [attr.id]="'delete-btn-id-' + cat_id + '-' + idx" icon="delete" style="color: #7a7a7a;"
+                                                           (click)="deleteDocumentoDlg(docu)"></paper-icon-button>
+                                        </span>
+                                        <span class="secondary"><iron-time datetime="{{docu.updated_at}}" format="dd/mmm/yyyy"></iron-time></span>
+                                    </div>
+                                </paper-item>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+<!--
+                    <div *ngFor="let cat_id of [1,2,3]">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <span class="panel-title">Panel {{cat_id}}</span>
+                            </div>
+                            <div class="panel-body">
+                                <paper-item class="group-item" *ngFor="let docu of currentProveedor.documentos | DocumentoPipe:cat_id; let idx = index">
+                                    <span class="primary">{{docu.file}}</span>
+                                    <span class="secondary" style="top:-8px;     position: relative;">
+                                        <paper-tooltip position="top" [attr.for]="'download-btn-id-' + cat_id + '-' + idx" offset="0">Bajar el documento desde el repositorio al disco local</paper-tooltip>
+                                        <paper-icon-button [attr.id]="'download-btn-id-' + cat_id + '-' +  idx" icon="file-download" style="color: #7a7a7a;"
+                                                           (click)="download(docu)"></paper-icon-button>
+                                        <paper-tooltip position="top" [attr.for]="'delete-btn-id-' + cat_id + '-' + idx"
+                                                       offset="0">Eliminar el documento del repositorio</paper-tooltip>
+                                        <paper-icon-button [attr.id]="'delete-btn-id-' + cat_id + '-' + idx" icon="delete" style="color: #7a7a7a;"
+                                                           (click)="deleteDocumentoDlg(docu)"></paper-icon-button>
+                                    </span>
+                                    <span class="secondary"><iron-time datetime="{{docu.updated_at}}" format="dd/mmm/yyyy"></iron-time></span>
+                                </paper-item>
+                            </div>
+                        </div>
+                    </div>
+
+-->
+                </div>
+
+
+            </iron-pages>
+        </div>
+        <!-- tab uno -->
+        <!--
+            <div id="listado" *ngIf="currentProveedor">
+                <div *ngFor="let cat_id of [1,2]">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Panel title: {{cat_id}}</h3>
+                        </div>
+                        <div class="panel-body">
+                            <paper-item class="group-item" *ngFor="let docu of currentProveedor.documentos | CategoriaPipe:cat_id">
+                                <span class="primary">{{docu.file}}</span>
+                                <span class="secondary"><iron-time datetime="{{docu.updated_at}}" format="dd/mmm/yyyy"></iron-time></span>
+                            </paper-item>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- tab dos -->
+        <!--
+                    <div id="listado2" *ngIf="currentProveedor">
+                        <input type="file" ng2FileSelect [uploader]="uploader"/>
+                        <paper-button raised class="custom indigo" (click)="subir(cat_id)">Subir</paper-button>
+                    </div>
+                </iron-pages>
+                -->
+
+        <!--
+        <div *ngIf="currentProveedor">
+            <h3>Doocus:</h3>
+            <div *ngFor="let cat_id of [1,2]">
+                <code>{{cat_id}}</code>
+                <div *ngFor="let docu of currentProveedor.documentos | CategoriaPipe:cat_id">
+                    <h3>{{docu.attachment}}</h3>
+                </div>
+            </div>
+        </div>
+        -->
+
+
+    </app-header-layout>
+
+</app-drawer-layout>
+
