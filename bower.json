@@ -1,12 +1,12 @@
 {
-  "name": "Proveedores-C",
-  "description": "Probando proveedores",
+  "name": "Proveedores-app",
+  "description": "Web App para que los Proveedores suban sus Documentos y Facturas",
   "main": "",
   "authors": [
     "Juan Calderon"
   ],
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://github.com/cimav/repositorio-front",
   "ignore": [
     "**/.*",
     "node_modules",

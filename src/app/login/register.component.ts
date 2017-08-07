@@ -2,6 +2,7 @@ import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProveedorService} from "../_services/proveedor.service";
 import {Proveedor} from "../_models/proveedor";
+import {CipherOption, DecryptedMessage, WordArray} from "crypto-js.d.ts/crypto-js";
 
 @Component({
 //    moduleId: module.id,
@@ -33,8 +34,12 @@ export class RegisterComponent implements OnInit, OnDestroy{
         this.sub = this.route.params.subscribe(params => {
             this.a_rfc = params['p_rfc']; // (+) converts string 'id' to a number
 
-
-            // In a real app: dispatch action to load the details here.
+            /*
+            let encryptedMessage:WordArray =  .encrypt("el mensaje enviado","elsecreto"); // .HmacSHA256("es el rfc", "laclave");
+            console.log(">>>>>",encryptedMessage);
+            let decryptedMessage:DecryptedMessage = crypto.decrypt(encryptedMessage,"elsecreto");
+            console.log(">>>>>",decryptedMessage);
+            */
         });
         this.proveedorModel = new Proveedor();
 
