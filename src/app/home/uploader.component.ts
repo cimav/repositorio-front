@@ -4,8 +4,9 @@
 import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
 import {FileUploader, FileItem} from "ng2-file-upload";
 import * as $ from 'jquery';
+import {AppConfig} from "../app.config";
 
-const URL = 'http://localhost:3000/documentos';
+// const URL = 'http://localhost:3000/documentos';
 
 @Component({
     selector: 'uploader-component',
@@ -15,13 +16,13 @@ const URL = 'http://localhost:3000/documentos';
 
 export class UploaderComponent implements OnInit {
 
-    private uploader: FileUploader = new FileUploader({url: URL, itemAlias: 'documento[attachment]', autoUpload: false, queueLimit: 10});
+    private uploader: FileUploader = new FileUploader({url: this.config.apiUrlDocus, itemAlias: 'documento[attachment]', autoUpload: false, queueLimit: 10});
     _categoria: number = 1;
     _proveedor: number = 1;
 
     @Output() cambio = new EventEmitter<any>();
 
-    constructor() {
+    constructor(private config: AppConfig) {
         //this.currentProveedor = JSON.parse(localStorage.getItem('currentProveedor'));
 
         //this.uploader = new FileUploader({url: URL, itemAlias: 'documento[attachment]', autoUpload: false, queueLimit: 1});

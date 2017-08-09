@@ -8,8 +8,8 @@
 <div >
     <div class="row text-center" style="    margin-top: 100px;">
         <h2>Proveedores</h2>
-        <h4>Registro</h4>
-        <h1>{{a_rfc}}</h1>
+        <h4>Registrar clave de acceso</h4>
+        <h1 *ngIf="proveedorModel">{{proveedorModel.rfc}}</h1>
     </div>
     <div class="row text-center" >
         <iron-image src="assets/img/logo-cimav-medio.png" ></iron-image>
@@ -18,7 +18,7 @@
     <div class="col-md-4 col-lg-offset-4" >
         <form #registroForm="ngForm"  (ngSubmit)="onSubmit()"  novalidate >
             <div class="row">
-                <paper-input (change)="rfcOnChange($event)" id="rfc-paper-input" pattern="^([A-ZÑ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$"  label="RFC" char-counter maxlength="13" minlength="10" required auto-validate error-message="El RFC debe ser valido" name="rfc"  [(ngModel)]="proveedorModel.rfc"></paper-input>
+                <paper-input readonly (change)="rfcOnChange($event)" id="rfc-paper-input" pattern="^([A-ZÑ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$"  label="RFC" char-counter maxlength="13" minlength="10" required auto-validate error-message="El RFC debe ser valido" name="rfc"  [(ngModel)]="proveedorModel.rfc"></paper-input>
             </div>
             <div class="row">
                 <paper-input id="razon-social-id"  label="Razón social" char-counter maxlength="140" minlength="5" required auto-validate error-message="Requiere la razón social" name="razon"  [(ngModel)]="proveedorModel.razon_social"></paper-input>

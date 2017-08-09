@@ -7,8 +7,9 @@ import {ProveedorService} from "../_services/proveedor.service";
 import {saveAs as importedSaveAs} from "file-saver";
 import {FileUploader, FileItem} from "ng2-file-upload";
 import {isNullOrUndefined} from "util";
+import {AppConfig} from "../app.config";
 
-const URL = 'http://localhost:3000/documentos';
+//const URL = 'http://localhost:3000/documentos';
 
 @Component({
    // moduleId: module.id,
@@ -35,11 +36,11 @@ export class HomeComponent implements OnInit {
 
     categoSelectedVolatile: string;
 
-    uploader: FileUploader = new FileUploader({url: URL, itemAlias: 'documento[attachment]', autoUpload: false, queueLimit: 10});
+    uploader: FileUploader = new FileUploader({url: this.config.apiUrlDocus, itemAlias: 'documento[attachment]', autoUpload: false, queueLimit: 10});
 
-    uploaderFactura: FileUploader = new FileUploader({url: URL, itemAlias: 'documento[attachment]', autoUpload: false, queueLimit: 10});
+    uploaderFactura: FileUploader = new FileUploader({url: this.config.apiUrlDocus, itemAlias: 'documento[attachment]', autoUpload: false, queueLimit: 10});
 
-    constructor(private proveedorService: ProveedorService) {
+    constructor(private proveedorService: ProveedorService, private config: AppConfig) {
         //this.currentProveedor = JSON.parse(localStorage.getItem('currentProveedor'));
     }
 

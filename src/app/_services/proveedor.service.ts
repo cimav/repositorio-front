@@ -49,6 +49,13 @@ export class ProveedorService {
             });
     }
 
+    existRfc = (rfc:string): Observable<Boolean> => {
+        return this.http.get(this.config.apiUrl + '/proveedores/exist_rfc/' + rfc, this.jwt())
+            .map((response: Response) => {
+                return <Boolean>response.json();
+            });
+    }
+
     /*
     create(proveedor: Proveedor) {
         return this.http.post(this.config.apiUrl + '/proveedores/register', proveedor, this.jwt());
@@ -76,8 +83,12 @@ export class ProveedorService {
         }
         return value;
     }
-    update(proveedor: Proveedor) {
-        return this.http.put(this.config.apiUrl + '/proveedores/' + proveedor.id, proveedor, this.jwt());
+    public update(proveedor: Proveedor) {
+        let toUpdate = JSON.stringify(proveedor, this.replacer);
+        return this.http.put(this.config.apiUrl + '/proveedores/', toUpdate,  this.jwt())
+            .map((response: Response) => {
+                return <Proveedor>response.json();
+            });
     }
 
     delete(id: string) {
