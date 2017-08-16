@@ -67,11 +67,13 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <span class="panel-title">Agregar facturas</span>
+                            <!--
                             <paper-tooltip position="bottom" for="seleccionar-factura-btn" offset="0">Buscar y seleccionar el o los documentos (XML/PDF) a subir</paper-tooltip>
                             <paper-button raised id="seleccionar-factura-btn" onclick="document.querySelector('#uploader_factura_id').click();">
                                 <iron-icon icon="search"></iron-icon>
                                 Seleccionar
                             </paper-button>
+                            -->
                         </div>
                         <div class="panel-body">
 
@@ -87,8 +89,15 @@
                                        -->
                                     <paper-input id="inputOrden" [(ngModel)]="ordenCompra" name="ordenCompra" label="Orden de compra"  pattern="[\w]+" maxlength="40" minlength="2"
                                              error-message="Acepta dígitos y letras sin espacios. E.g. 1A170005" required auto-validate="true"
-                                             style="max-width: 400px;"
+                                             style="display: inline-block;"
                                     ></paper-input> <!-- [attr.disabled]="uploaderFactura.queue.length<=0" -->
+
+                                    <paper-tooltip position="bottom" for="seleccionar-factura-btn" offset="0">Buscar y seleccionar el o los documentos (XML/PDF) a subir</paper-tooltip>
+                                    <paper-button raised id="seleccionar-factura-btn" onclick="document.querySelector('#uploader_factura_id').click();" >
+                                        <iron-icon icon="search"></iron-icon>
+                                        Seleccionar Archivos
+                                    </paper-button>
+
                                 </paper-item>
 
                             </form>
@@ -122,6 +131,7 @@
                                 <span class="panel-title">Facturas</span>
                             </div>
                             <div class="panel-body">
+                                <!--
                                 <paper-item class="group-item" *ngFor="let docu of currentProveedor.documentos | DocumentoPipe:cat_id; let idx = index">
                                     <code style="white-space: pre;">{{formatOrdenCompra(docu.orden_compra)}}</code>
                                     <code *ngIf="docu.file.toLowerCase().indexOf('.xml')>0"><strong>XML</strong></code>
@@ -138,6 +148,29 @@
                                     </span>
                                     <span class="secondary"><iron-time datetime="{{docu.updated_at}}" format="dd/mmm/yyyy"></iron-time></span>
                                 </paper-item>
+                                -->
+
+                                <ng-container class="group-item" *ngFor="let factura of facturas; let idx = index">
+                                    <paper-item class="group-item" *ngIf="hasGroup(idx)">
+                                        <span class="badge" style="background-color: lightcoral; font-size: 14px;">{{factura.orden_compra}}</span>
+                                    </paper-item>
+                                    <paper-item class="group-item" style="padding-left: 40px;">
+                                        <span class="badge" style="background-color: #80CBC4;" *ngIf="factura.file.toLowerCase().indexOf('.xml')>0">XML</span>
+                                        <span class="badge" style="background-color: #80CBC4;" *ngIf="factura.file.toLowerCase().indexOf('.pdf')>0">PDF</span>
+                                        <span class="primary">{{factura.file}}</span>
+                                        <span class="secondary" style="top:-8px;     position: relative;">
+                                            <paper-tooltip position="top" [attr.for]="'download-btn-id-50' + '-' + idx" offset="0">Bajar el documento desde el repositorio al disco local</paper-tooltip>
+                                            <paper-icon-button [attr.id]="'download-btn-id-50' + '-' +  idx" icon="file-download" style="color: #7a7a7a;"
+                                                           (click)="download(factura)"></paper-icon-button>
+                                            <paper-tooltip position="top" [attr.for]="'delete-btn-id-50' + '-' + idx"
+                                                       offset="0">Eliminar el documento del repositorio</paper-tooltip>
+                                            <paper-icon-button [attr.id]="'delete-btn-id-50' + '-' + idx" icon="delete" style="color: #7a7a7a;"
+                                                           (click)="deleteDocumentoDlg(factura)"></paper-icon-button>
+                                        </span>
+                                        <span class="secondary"><iron-time datetime="{{factura.updated_at}}" format="dd/mmm/yyyy"></iron-time></span>
+                                    </paper-item>
+                                </ng-container>
+
                             </div>
                         </div>
                     </div>
@@ -152,15 +185,25 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <span class="panel-title">Agregar documento</span>
+                            <!--
                             <paper-tooltip position="top" for="seleccionar-btn" offset="0">Buscar y seleccionar el o los documentos a subir</paper-tooltip>
                             <paper-button raised id="seleccionar-btn" onclick="document.querySelector('#uploader_id').click();">
                                 <iron-icon icon="search"></iron-icon>
                                 Seleccionar
                             </paper-button>
+                            -->
                         </div>
                         <div class="panel-body">
 
                             <input id="uploader_id" type="file" multiple ng2FileSelect [uploader]="uploader" accept=".xml,.txt,.jpg,.jpeg,.gif,.png,.pdf,.doc,.docx,.xls,.xlsx"/>
+
+                            <paper-item  class="group-item" style="height: 83px;">
+                                <paper-tooltip position="top" for="seleccionar-btn" offset="0">Buscar y seleccionar el o los documentos a subir</paper-tooltip>
+                                <paper-button raised id="seleccionar-btn" onclick="document.querySelector('#uploader_id').click();">
+                                    <iron-icon icon="search"></iron-icon>
+                                    Seleccionar Archivos
+                                </paper-button>
+                            </paper-item>
 
                             <paper-item class="group-item" *ngFor="let item of uploader.queue; let idx = index">
                                 <span class="primary">{{item?.file?.name}}</span>
@@ -197,7 +240,8 @@
                         <div class="panel-body">
                             <div *ngFor="let cat_id of [1,2,3]">
                                 <paper-item class="group-item">
-                                    <code>{{txtCatego(cat_id)}}</code>
+                                    <!-- <code>{{txtCatego(cat_id)}}</code> -->
+                                    <span class="badge" style="background-color: lightcoral; font-size: 14px;">{{txtCatego(cat_id)}}</span>
                                 </paper-item>
 
                                 <paper-item class="group-item" *ngFor="let docu of currentProveedor.documentos | DocumentoPipe:cat_id; let idx = index">

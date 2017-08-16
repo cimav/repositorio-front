@@ -241,7 +241,7 @@ input[type="file"] {
 }
 #seleccionar-btn {
   float: right;
-  top: -4px;
+  top: 26px;
 }
 paper-button {
   padding: 3px 8px;
@@ -264,8 +264,9 @@ paper-progress {
 }
 #seleccionar-factura-btn {
     float: right;
-    top: -4px;
-    right: -14px;
+    top: 26px;
+    /*top: -4px;
+    right: -14px;*/
 }
 .btn-depende-orden[disabled]{
     color: #BDBDBD !important;
