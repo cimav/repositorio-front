@@ -52,6 +52,8 @@ import {RegisterComponent} from "./login/register.component";
       PolymerElement('iron-list'),
       PolymerElement('iron-icon'),
 
+    PolymerElement('d2l-loading-spinner'),
+
     PolymerElement('vaadin-combo-box'),
 
     PolymerElement('documentos-group'),

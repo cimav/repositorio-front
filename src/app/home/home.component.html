@@ -106,7 +106,8 @@
                                 <code>{{item?.file?.type?.split('/')[1]?.toUpperCase()}}</code>
                                 <span class="primary">{{item?.file?.name}}</span>
                                 <span class="secondary" style="top:-8px;     position: relative;">
-                                    <paper-icon-button class="btn-depende-orden" [attr.id]="'upload-factura-btn-id-' + idx" [disabled]=!facturaForm.form.valid icon="cloud-upload" style="color: #7a7a7a;" (click)="uploadFacturaItem(item)"></paper-icon-button>
+                                    <d2l-loading-spinner *ngIf="item.isUploading" size="30" color="#37474F" class="padding" style="top: 10px; position: relative;" ></d2l-loading-spinner>
+                                    <paper-icon-button *ngIf="!item.isUploading" class="btn-depende-orden" [attr.id]="'upload-factura-btn-id-' + idx" [disabled]=!facturaForm.form.valid icon="cloud-upload" style="color: #7a7a7a;" (click)="uploadFacturaItem(item)"></paper-icon-button>
                                     <paper-icon-button [attr.id]="'cancelar-factura-btn-id-' + idx" icon="clear" style="color: #7a7a7a;" (click)="item.remove()" ></paper-icon-button>
                                 </span>
                             </paper-item>
@@ -208,10 +209,11 @@
                             <paper-item class="group-item" *ngFor="let item of uploader.queue; let idx = index">
                                 <span class="primary">{{item?.file?.name}}</span>
                                 <span class="secondary" style="top:-8px;     position: relative;">
-                                    <select [attr.id]="'categoria_id_' + idx" class="xxform-control" required> <!-- [(ngModel)]="categorias[i]"  -->
+                                    <select [disabled]="item.isUploading"  [attr.id]="'categoria_id_' + idx" class="xxform-control" required> <!-- [(ngModel)]="categorias[i]"  -->
                                         <option *ngFor="let catego of categorias | slice:0:(categorias.length-1)" [value]="catego.id">{{catego.categoria}}</option>
                                     </select>
-                                    <paper-icon-button [attr.id]="'upload-btn-id-' + idx" icon="cloud-upload" style="color: #7a7a7a;" (click)="uploadItem('categoria_id_' + idx, item)"></paper-icon-button>
+                                    <d2l-loading-spinner *ngIf="item.isUploading" size="30" color="#37474F" class="padding" style="top: 10px; position: relative;" ></d2l-loading-spinner>
+                                    <paper-icon-button *ngIf="!item.isUploading" [attr.id]="'upload-btn-id-' + idx" icon="cloud-upload" style="color: #7a7a7a;" (click)="uploadItem('categoria_id_' + idx, item)"></paper-icon-button>
                                     <paper-icon-button [attr.id]="'cancelar-btn-id-' + idx" icon="clear" style="color: #7a7a7a;" (click)="item.remove()" onclick="document.querySelector('#toastCanceled').show();"></paper-icon-button>
 
                                     <paper-tooltip position="top" [attr.for]="'categoria_id_' + idx" offset="0">Seleccionar la categoría del documento</paper-tooltip>
@@ -228,6 +230,7 @@
                                 <li>Por cada archivo seleccione su tipo (e.g 'Acta Constitutiva')</li>
                                 <li>Utilice el icono <iron-icon icon="cloud-upload"></iron-icon> para subir el archivo</li>
                                 <li>Utilice el icono <iron-icon icon="clear"></iron-icon> para cancelar el archivo</li>
+                                <li>Puede subir archivos: PDF, XML, JPEG, PNG, Excel y Word</li>
                             </ul>
                         </div>
                     </div>
@@ -238,7 +241,7 @@
                             <span class="panel-title">Documentos</span>
                         </div>
                         <div class="panel-body">
-                            <div *ngFor="let cat_id of [1,2,3]">
+                            <div *ngFor="let cat_id of [1,2,3,4,5,6,7]">
                                 <paper-item class="group-item">
                                     <!-- <code>{{txtCatego(cat_id)}}</code> -->
                                     <span class="badge" style="background-color: lightcoral; font-size: 14px;">{{txtCatego(cat_id)}}</span>

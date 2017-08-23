@@ -23,6 +23,7 @@
     "tree-grid": "vaadin/tree-grid#^0.7.4",
     "iron-list": "^2.0.1",
     "s-moment": "StartPolymer/s-moment#^0.1.1",
-    "iron-time": "cloudily/iron-time#^0.1.0"
+    "iron-time": "cloudily/iron-time#^0.1.0",
+    "d2l-loading-spinner": "^6.0.0"
   }
 }

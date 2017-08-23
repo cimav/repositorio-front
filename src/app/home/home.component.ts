@@ -8,6 +8,7 @@ import {saveAs as importedSaveAs} from "file-saver";
 import {FileUploader, FileItem} from "ng2-file-upload";
 import {isNullOrUndefined} from "util";
 import {AppConfig} from "../app.config";
+import {Router, RouterStateSnapshot} from "@angular/router";
 
 //const URL = 'http://localhost:3000/documentos';
 
@@ -44,7 +45,7 @@ export class HomeComponent implements OnInit {
     //distintos: string[] =[];
     facturas: Documento[] = [];
 
-    constructor(private proveedorService: ProveedorService, private config: AppConfig) {
+    constructor(private proveedorService: ProveedorService, private config: AppConfig, private router: Router) {
         //this.currentProveedor = JSON.parse(localStorage.getItem('currentProveedor'));
     }
 
@@ -118,37 +119,24 @@ export class HomeComponent implements OnInit {
     }
 */
 
+    itemIsUploading(item: FileItem) {
+        var r = item.isUploading;
+        console.log(r, item.isReady, item.isUploaded);
+        return r;
+    }
+
     cargarProveedor() {
 
         this.proveedorService.getByRfc(this.currentProveedorToken.rfc).subscribe(
             (response: Proveedor) => {
                 this.currentProveedor = response;
 
-                this.facturas = this.currentProveedor.documentos.filter((docu) => {
-                    return docu.categoria_id == 50;
-                });
-                this.facturas = this.facturas.sort(function(f1,f2) {
-                    return (f1.orden_compra > f2.orden_compra) ? 1 : ((f2.orden_compra > f1.orden_compra) ? -1 : 0);
-                });
-
-                var ddss:string[] = [];
-                this.groupMap = this.facturas.reduce(function(map, factura, idx, arr) {
-                    map[idx] = false;
-                    if (idx == 0 || factura.orden_compra != arr[idx-1].orden_compra) {
-                        map[idx] = true;
-                        ddss.push(factura.orden_compra);
-                    }
-                    return map;
-                }, {});
-
-                //this.distintos = ddss;
-
-                console.log(ddss);
-                console.log(this.groupMap);
-
-
+                this.cargarFacturas();
             },
-            error => console.log(error),
+            error => {
+                console.log(error);
+                this.router.navigate(['/login']); // , { queryParams: { returnUrl: state this.st.url }});
+            },
             () => console.log("Get Proveedor:" + this.currentProveedorToken.rfc)
         );
 
@@ -162,10 +150,31 @@ export class HomeComponent implements OnInit {
         this.proveedorService.getDocusOf(this.currentProveedor.id).subscribe(
             (response: Documento[]) => {
                 this.currentProveedor.documentos = response;
+
+                this.cargarFacturas();
             },
             error => console.log(error),
             () => {}
         );
+    }
+
+    cargarFacturas() {
+        this.facturas = this.currentProveedor.documentos.filter((docu) => {
+            return docu.categoria_id == 50;
+        });
+        this.facturas = this.facturas.sort(function(f1,f2) {
+            return (f1.orden_compra > f2.orden_compra) ? 1 : ((f2.orden_compra > f1.orden_compra) ? -1 : 0);
+        });
+
+        var ddss:string[] = [];
+        this.groupMap = this.facturas.reduce(function(map, factura, idx, arr) {
+            map[idx] = false;
+            if (idx == 0 || factura.orden_compra != arr[idx-1].orden_compra) {
+                map[idx] = true;
+                ddss.push(factura.orden_compra);
+            }
+            return map;
+        }, {});
     }
 
     uploadItem(select_id: string, item: FileItem) {
