@@ -2,7 +2,7 @@
  * Created by calderon on 5/17/17.
  */
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Proveedor, Documento, Categoria} from "../_models/proveedor";
+import {Proveedor, Documento, Categoria, Orden} from "../_models/proveedor";
 import {ProveedorService} from "../_services/proveedor.service";
 import {saveAs as importedSaveAs} from "file-saver";
 import {FileUploader, FileItem} from "ng2-file-upload";
@@ -28,12 +28,14 @@ export class HomeComponent implements OnInit {
 
     currentProveedorToken: any;
 
+    ordenes: Orden[];
+
     documentoToDelete: Documento;
     itemToCancelar: FileItem;
 
     categorias: Categoria[];
     categoriaSelected: Categoria;
-    ordenCompra: string = '';
+    ordenCompra: Orden;
 
     categoSelectedVolatile: string;
 
@@ -131,6 +133,8 @@ export class HomeComponent implements OnInit {
             (response: Proveedor) => {
                 this.currentProveedor = response;
 
+                this.cargarOrdenesOf();
+
                 this.cargarFacturas();
             },
             error => {
@@ -198,6 +202,16 @@ export class HomeComponent implements OnInit {
         );
     }
 
+    cargarOrdenesOf() {
+        this.proveedorService.getOrdenesOf(this.currentProveedor.rfc).subscribe(
+            (response: Orden[]) => {
+                this.ordenes = response;
+            },
+            error => console.log(error),
+            () => console.log("Get Ordenes:" + this.currentProveedorToken.rfc + " -- " + this.ordenes.length)
+        );
+    }
+
     onTabSelect(event, details) {
         this.tab_selected = event.target.selected;
     }
@@ -253,7 +267,7 @@ export class HomeComponent implements OnInit {
 
     ordenIsInvalid() {
         let pattern = new RegExp('[^//W]');
-        let r = pattern.test(this.ordenCompra);
+        let r = pattern.test(this.ordenCompra.orden);
         console.log(this.ordenCompra,r);
         return r;
 
@@ -312,6 +326,14 @@ export class HomeComponent implements OnInit {
         }
         let catego = this.categorias.find(c => c.id == id);
        return catego.categoria;
+    }
+
+    selectedOrdenChange(event) {
+        //this.ordenCompra = event;
+    }
+
+    hasOrdenes() {
+        return !isNullOrUndefined(this.ordenes) && this.ordenes.length > 0;
     }
 
 }

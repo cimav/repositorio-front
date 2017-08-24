@@ -87,16 +87,38 @@
                                     <input [(ngModel)]="ordenCompra" [disabled]="uploaderFactura.queue.length<=0" type="text" id="orden_id" name="orden" pattern="^[\w.-]+$" title="Acepta letras, números, '-', '_' y sin espacios"
                                        style="margin-left: 5px; width: 40%;">
                                        -->
+
+                                    <!--
                                     <paper-input id="inputOrden" [(ngModel)]="ordenCompra" name="ordenCompra" label="Orden de compra"  pattern="[\w]+" maxlength="40" minlength="2"
                                              error-message="Acepta dígitos y letras sin espacios. E.g. 1A170005" required auto-validate="true"
                                              style="display: inline-block;"
                                     ></paper-input> <!-- [attr.disabled]="uploaderFactura.queue.length<=0" -->
 
-                                    <paper-tooltip position="bottom" for="seleccionar-factura-btn" offset="0">Buscar y seleccionar el o los documentos (XML/PDF) a subir</paper-tooltip>
-                                    <paper-button raised id="seleccionar-factura-btn" onclick="document.querySelector('#uploader_factura_id').click();" >
-                                        <iron-icon icon="search"></iron-icon>
-                                        Seleccionar Archivos
-                                    </paper-button>
+                                    <!--
+                                    <vaadin-combo-box class="col-md-3" required auto-validate error-message="requiere seleccionar la orden de compra"
+                                                      label="Orden de compra"
+                                                      item-label-path="orden"
+                                                      item-value-path="orden"
+                                                      [items]="ordenes"
+                                                      [value]="ordenCompra"
+                                                      (selectedItem)="ordenCompra"
+                                                      (selectedItemChange)="selectedOrdenChange($event)"
+                                    ></vaadin-combo-box>
+                                    -->
+
+                                    <label *ngIf="!hasOrdenes()">No tiene órdenes de compra</label>
+                                    <ng-container *ngIf="hasOrdenes()">
+                                        <label>Ordenes</label>
+                                        <select required style="width: 110px;">
+                                            <option *ngFor="let orden of ordenes" [value]="orden.orden">{{orden.orden}}</option>
+                                        </select>
+
+                                        <paper-tooltip position="bottom" for="seleccionar-factura-btn" offset="0">Buscar y seleccionar el o los documentos (XML/PDF) a subir</paper-tooltip>
+                                        <paper-button raised id="seleccionar-factura-btn" onclick="document.querySelector('#uploader_factura_id').click();" >
+                                            <iron-icon icon="search"></iron-icon>
+                                            Seleccionar Archivos
+                                        </paper-button>
+                                    </ng-container>
 
                                 </paper-item>
 
@@ -114,9 +136,15 @@
 
                         </div>
                         <div class="panel-footer">
-                            <ul class="ul-ayuda">
+                            <ul *ngIf="!hasOrdenes()" class="ul-ayuda">
+                                <li>Si no tiene órdenes de compra vigentes/abiertas no puede subir facturas</li>
+                                <li>Contacte al departamento de adquisiciones del Cimav</li>
+                            </ul>
+                            <ul *ngIf="hasOrdenes()" class="ul-ayuda">
+                                <li>Se muestran sólo las <strong>órdenes</strong> pendientes de factura (total o parcial)</li>
+                                <li>Seleccione la <strong>Orden de Compra</strong> correspondiente a la factura a subir</li>
                                 <li>Utilice el botón <iron-icon icon="search"></iron-icon><strong>SELLECIONAR</strong> para buscar y seleccionar los archivos <strong>XML</strong> y <strong>PDF</strong> correspondientes a la factura a subir</li>
-                                <li>Capture la <strong>Orden de Compra</strong> correspondiente a la factura (e.g. 1A171036)</li>
+<!--                                <li>Capture la <strong>Orden de Compra</strong> correspondiente a la factura (e.g. 1A171036)</li>  -->
                                 <li>A cada archivo <strong>XML</strong> le debe corresponder un archivo <strong>PDF</strong></li>
                                 <li>Se despliega una lista de archivos (facturas) listos para subir y todos correspondientes a la misma orden capturada</li>
                                 <li>Las <strong>Ordenes</strong> pueden ser parciales; es decir, tener más de una factura</li>
@@ -198,7 +226,7 @@
 
                             <input id="uploader_id" type="file" multiple ng2FileSelect [uploader]="uploader" accept=".xml,.txt,.jpg,.jpeg,.gif,.png,.pdf,.doc,.docx,.xls,.xlsx"/>
 
-                            <paper-item  class="group-item" style="height: 83px;">
+                            <paper-item  class="group-item" style="height: 50px;">
                                 <paper-tooltip position="top" for="seleccionar-btn" offset="0">Buscar y seleccionar el o los documentos a subir</paper-tooltip>
                                 <paper-button raised id="seleccionar-btn" onclick="document.querySelector('#uploader_id').click();">
                                     <iron-icon icon="search"></iron-icon>

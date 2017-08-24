@@ -24,6 +24,10 @@ export class Documento {
     created_at: Date;
 }
 
+export class Orden {
+    orden: string;
+}
+
 /*
 export const CATEGORIAS: Categoria[] = [
     { id: 0, categoria: 'Sin categoría' },
