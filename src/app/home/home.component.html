@@ -109,7 +109,7 @@
                                     <label *ngIf="!hasOrdenes()">No tiene órdenes de compra</label>
                                     <ng-container *ngIf="hasOrdenes()">
                                         <label>Ordenes</label>
-                                        <select required style="width: 110px;">
+                                        <select required style="width: 110px;" [attr.id]="'select_ordenes_id'">
                                             <option *ngFor="let orden of ordenes" [value]="orden.orden">{{orden.orden}}</option>
                                         </select>
 

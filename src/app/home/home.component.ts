@@ -187,6 +187,7 @@ export class HomeComponent implements OnInit {
     }
     uploadFacturaItem(item: FileItem) {
         this.categoSelectedVolatile =  '55';
+        this.ordenCompra =  $('#' + 'select_ordenes_id').val() ;
         item.upload();
     }
 
