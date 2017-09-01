@@ -3,11 +3,13 @@
  */
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {AppConfig} from "../app.config";
+import {CurrentProveedor} from "../_models/proveedor";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-    constructor(private router: Router) { }
+    constructor(private router: Router, private config: AppConfig) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
@@ -16,7 +18,12 @@ export class AuthGuard implements CanActivate {
             return true;
         }
 
-        if (localStorage.getItem('currentProveedor')) {
+        let jsonObj: any = localStorage.getItem('currentProveedor');
+        if (jsonObj) {
+
+            let currentProveedorObj :CurrentProveedor = <CurrentProveedor>JSON.parse(jsonObj);
+            this.config.asAdmin = currentProveedorObj.as_admin;
+
             // 2> si hay un currentProveedor en el localStorage, se lo permite
             return true;
         }

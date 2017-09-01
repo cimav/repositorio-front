@@ -19,9 +19,6 @@ export class AuthenticationService {
                 let authToken = response.json();
                 if (authToken && authToken.auth_token) {
 
-                    // injectarle el rfc del proveedor logeado
-                    authToken.rfc = rfc;
-
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentProveedor', JSON.stringify(authToken));
                 }

@@ -50,3 +50,9 @@ export const CATEGOS = [
     { id: 50, txt: '50) Las Facturas' }
 ];
 */
+
+export interface CurrentProveedor {
+    auth_token: string;
+    rfc: string;
+    as_admin: boolean;
+}

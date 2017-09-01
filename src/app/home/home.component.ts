@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
     //distintos: string[] =[];
     facturas: Documento[] = [];
 
-    constructor(private proveedorService: ProveedorService, private config: AppConfig, private router: Router) {
+    constructor(private proveedorService: ProveedorService, public config: AppConfig, private router: Router) {
         //this.currentProveedor = JSON.parse(localStorage.getItem('currentProveedor'));
     }
 
