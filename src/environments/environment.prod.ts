@@ -1,3 +1,5 @@
+// Production
 export const environment = {
-  production: true
+  production: true,
+  apiUrl: 'http://proveedores-rest.cimav.edu.mx'
 };

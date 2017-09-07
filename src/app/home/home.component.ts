@@ -9,6 +9,7 @@ import {FileUploader, FileItem} from "ng2-file-upload";
 import {isNullOrUndefined} from "util";
 import {AppConfig} from "../app.config";
 import {Router, RouterStateSnapshot} from "@angular/router";
+import {environment} from "../../environments/environment";
 
 //const URL = 'http://localhost:3000/documentos';
 
@@ -232,7 +233,6 @@ export class HomeComponent implements OnInit {
         } else {
             url = url + docu.categoria_id + "/" + docu.file;
         }
-        console.log(url);
         window.open(url, "_blank");
     }
 
