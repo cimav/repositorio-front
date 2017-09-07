@@ -1,5 +1,5 @@
 import construct = Reflect.construct;
-import {environment} from "../environments/environment.prod";
+import {environment} from "../environments/environment";
 /**
  * Created by calderon on 5/17/17.
  */
