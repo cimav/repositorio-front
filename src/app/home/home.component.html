@@ -188,9 +188,11 @@
                                         <span class="badge" style="background-color: #80CBC4;" *ngIf="factura.file.toLowerCase().indexOf('.pdf')>0">PDF</span>
                                         <span class="primary">{{factura.file}}</span>
                                         <span *ngIf="config.asAdmin" class="secondary" style="top:-8px;     position: relative;">
-                                            <paper-icon-button [attr.id]="'download-btn-id-50' + '-' +  idx" icon="file-download" style="color: #7a7a7a;" (click)="download(factura)"></paper-icon-button>
+                                            <paper-icon-button [attr.id]="'view-btn-id-50' + '-' +  idx" icon="visibility" style="color: #7a7a7a;" (click)="viewDocu(factura)"></paper-icon-button>
+<!--                                            <paper-icon-button [attr.id]="'download-btn-id-50' + '-' +  idx" icon="file-download" style="color: #7a7a7a;" (click)="download(factura)"></paper-icon-button>  -->
                                             <paper-icon-button [attr.id]="'delete-btn-id-50' + '-' + idx" icon="delete" style="color: #7a7a7a;" (click)="deleteDocumentoDlg(factura)"></paper-icon-button>
 
+                                            <paper-tooltip position="top" [attr.for]="'view-btn-id-50' + '-' + idx" offset="0">Ver el documento</paper-tooltip>
                                             <paper-tooltip position="top" [attr.for]="'delete-btn-id-50' + '-' + idx" offset="0">Eliminar el documento del repositorio</paper-tooltip>
                                             <paper-tooltip position="top" [attr.for]="'download-btn-id-50' + '-' + idx" offset="0">Bajar el documento desde el repositorio al disco local</paper-tooltip>
                                         </span>
@@ -277,9 +279,11 @@
                                     <div class="col-sm-offset-0" style="padding-left: 30px;">
                                         <span class="primary">{{docu.file}}</span>
                                         <span *ngIf="config.asAdmin" class="secondary" style="top:-8px;     position: relative;">
-                                            <paper-icon-button [attr.id]="'download-btn-id-' + cat_id + '-' +  idx" icon="file-download" style="color: #7a7a7a;" (click)="download(docu)"></paper-icon-button>
+                                            <paper-icon-button [attr.id]="'view-btn-id-'+ cat_id + '-' +  idx" icon="visibility" style="color: #7a7a7a;" (click)="viewDocu(docu)"></paper-icon-button>
+<!--                                            <paper-icon-button [attr.id]="'download-btn-id-' + cat_id + '-' +  idx" icon="file-download" style="color: #7a7a7a;" (click)="download(docu)"></paper-icon-button> -->
                                             <paper-icon-button [attr.id]="'delete-btn-id-' + cat_id + '-' + idx" icon="delete" style="color: #7a7a7a;" (click)="deleteDocumentoDlg(docu)"></paper-icon-button>
 
+                                            <paper-tooltip position="top" [attr.for]="'view-btn-id-' + cat_id + '-' + idx" offset="0">Ver el documento</paper-tooltip>
                                             <paper-tooltip position="top" [attr.for]="'delete-btn-id-' + cat_id + '-' + idx" offset="0">Eliminar el documento del repositorio</paper-tooltip>
                                             <paper-tooltip position="top" [attr.for]="'download-btn-id-' + cat_id + '-' + idx" offset="0">Bajar el documento desde el repositorio al disco local</paper-tooltip>
                                         </span>

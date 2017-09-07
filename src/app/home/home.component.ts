@@ -225,10 +225,21 @@ export class HomeComponent implements OnInit {
     }
 */
 
+    viewDocu(docu: Documento) {
+        var url = this.config.apiUrlDocus + "/" +this.currentProveedor.rfc + "/";
+        if (docu.categoria_id == 50) {
+            url = url + "facturas/" + docu.orden_compra + "/" + docu.file;
+        } else {
+            url = url + docu.categoria_id + "/" + docu.file;
+        }
+        console.log(url);
+        window.open(url, "_blank");
+    }
+
     download(docu: Documento) {
         this.proveedorService.downloadFile(docu.id).subscribe(blob => {
                 importedSaveAs(blob, docu.file);
-            $('#toastDownloaded').trigger('show');
+                $('#toastDownloaded').trigger('show');
             }
         );
     }

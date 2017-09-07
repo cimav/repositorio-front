@@ -1,0 +1,27 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<label for="rfc_id">Proveedor RFC</label>
+<input type="text" id="rfc_id">
+<input type="submit" value='Ver' onClick="setClave()">
+<strong id="clave_id"></strong>
+<script type="text/javascript">
+    function setClave() {
+        document.getElementById("clave_id").innerHTML = 'buscando....';
+        var rfc_val  = document.getElementById("rfc_id").value;
+        $.ajax({
+            url: 'http://proveedores-rest.cimav.edu.mx/proveedores/codigo/' + rfc_val,
+            success: function (data) {
+                document.getElementById("clave_id").innerHTML = data;
+            },
+            error: function (xhr, msg, error) {
+                document.getElementById("clave_id").innerHTML = msg;
+            }
+        });
+
+        //window.open("http://documentos.proveedores.cimav.edu.mx/", "cliente");
+    }
+</script>
+
+</html>
