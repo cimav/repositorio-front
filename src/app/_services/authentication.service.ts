@@ -10,10 +10,18 @@ import { AppConfig } from '../app.config';
 
 @Injectable()
 export class AuthenticationService {
-    constructor(private http: Http, private config: AppConfig) { }
+
+    headers: any;
+
+    constructor(private http: Http, private config: AppConfig) {
+        this.headers = new Headers();
+        this.headers.append('Content-Type', 'application/json');
+        this.headers.append('Accept', 'q=0.8;application/json;q=0.9');
+
+    }
 
     login(rfc: string, password: string) {
-        return this.http.post(this.config.apiUrl + '/authenticate', { rfc: rfc, password: password })
+        return this.http.post(this.config.apiUrl + '/authenticate', { rfc: rfc, password: password },this.headers)
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let authToken = response.json();

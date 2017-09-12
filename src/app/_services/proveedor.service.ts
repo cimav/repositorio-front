@@ -111,6 +111,7 @@ export class ProveedorService {
         if (currentProveedor && currentProveedor.auth_token) {
             let headers = new Headers({ 'Authorization': 'Bearer ' + currentProveedor.auth_token });
             headers.append('Content-Type', 'application/json');
+            headers.append('Accept', 'q=0.8;application/json;q=0.9');
             return new RequestOptions({ headers: headers });
         }
     }
