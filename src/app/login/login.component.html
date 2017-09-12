@@ -13,7 +13,8 @@
     <div class="col-md-4 col-lg-offset-4" >
     <form #loginForm="ngForm"  (ngSubmit)="onSubmit()"  novalidate > <!-- (ngSubmit)="f.form.valid && login()" #f="ngForm"  $event.value -->
         <div class="row">
-            <paper-input (change)="rfcOnChange($event)" id="rfc-paper-input" pattern="^([A-ZÑ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$"  label="RFC" char-counter maxlength="13" minlength="10" required auto-validate error-message="El RFC debe ser valido" name="rfc"  [(ngModel)]="model.rfc"></paper-input>
+            <paper-input  id="rfc-paper-input" pattern="^([A-ZÑ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$"  label="RFC" char-counter maxlength="13" minlength="10" required auto-validate error-message="El RFC debe ser valido" name="rfc"  [(ngModel)]="model.rfc"></paper-input>
+            <!-- (change)="rfcOnChange($event)" -->
         </div>
         <div class="row">
             <paper-input type="password"  label="Password" required char-counter maxlength="12" minlength="8" auto-validate error-message="Mínimo 8 caracteres con al menos una letra y un número" name="password"  [(ngModel)]="model.password"></paper-input>

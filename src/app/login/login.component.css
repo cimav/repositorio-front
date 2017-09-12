@@ -88,3 +88,9 @@ paper-fab[disabled]{
 paper-fab.custom:hover {
     background-color: var(--paper-indigo-100);
 }
+
+#rfc-paper-input {
+    --paper-input-container-input: {
+        text-transform: uppercase;
+    };
+}
