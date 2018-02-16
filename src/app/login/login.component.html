@@ -17,8 +17,8 @@
             <!-- (change)="rfcOnChange($event)" -->
         </div>
         <div class="row">
-            <paper-input type="password"  label="Password" required char-counter maxlength="12" minlength="8" auto-validate error-message="Mínimo 8 caracteres con al menos una letra y un número" name="password"  [(ngModel)]="model.password"></paper-input>
-            <!--                     pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" -->
+            <paper-input type="password" label="Password" required char-counter maxlength="12" minlength="8" auto-validate error-message="Mínimo 8 caracteres con al menos una letra y un número" name="password"  [(ngModel)]="model.password"></paper-input>
+            <!--  pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"  -->
         </div>
         <div class="row" style="float: right; margin-top: 15px;">
             <paper-button class=" indigo" (click)="loginForm.ngSubmit.emit();" raised>Ingresar</paper-button> <!-- (click)="loginForm.ngSubmit.emit(loginForm);"   (click)="login()" [disabled]=!loginForm.form.valid  -->

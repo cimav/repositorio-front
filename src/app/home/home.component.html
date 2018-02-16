@@ -190,7 +190,7 @@
                                         <span class="badge" style="background-color: #80CBC4;" *ngIf="factura.file.toLowerCase().indexOf('.xml')>0">XML</span>
                                         <span class="badge" style="background-color: #80CBC4;" *ngIf="factura.file.toLowerCase().indexOf('.pdf')>0">PDF</span>
                                         <span class="primary">{{factura.file}}</span>
-                                        <span *ngIf="config.asAdmin" class="secondary" style="top:-8px;     position: relative;">
+                                        <span class="secondary" style="top:-8px;     position: relative;"> <!-- *ngIf="config.asAdmin"  -->
                                             <paper-icon-button [attr.id]="'view-btn-id-50' + '-' +  idx" icon="visibility" style="color: #7a7a7a;" (click)="viewDocu(factura)"></paper-icon-button>
 <!--                                            <paper-icon-button [attr.id]="'download-btn-id-50' + '-' +  idx" icon="file-download" style="color: #7a7a7a;" (click)="download(factura)"></paper-icon-button>  -->
                                             <paper-icon-button *ngIf="config.asAdmin" [attr.id]="'delete-btn-id-50' + '-' + idx" icon="delete" style="color: #7a7a7a;" (click)="deleteDocumentoDlg(factura)"></paper-icon-button>
@@ -272,7 +272,7 @@
                             <span class="panel-title">Documentos</span>
                         </div>
                         <div class="panel-body">
-                            <div *ngFor="let cat_id of [1,2,3,4,5,6,7]">
+                            <div *ngFor="let cat_id of [1,2,3,4,5,6,7,8]">
                                 <paper-item class="group-item">
                                     <!-- <code>{{txtCatego(cat_id)}}</code> -->
                                     <span class="badge" style="background-color: lightcoral; font-size: 14px;">{{txtCatego(cat_id)}}</span>
