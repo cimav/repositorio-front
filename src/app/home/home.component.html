@@ -106,11 +106,13 @@
                                     ></vaadin-combo-box>
                                     -->
 
-                                    <label *ngIf="!hasOrdenes()">No tiene órdenes de compra</label>
+                                    <label *ngIf="!hasOrdenes()">No tiene órdenes de compra (o se están cargando)</label>
                                     <ng-container *ngIf="hasOrdenes()">
-                                        <label>Ordenes</label>
+                                        <label>Seleccione orden</label>
                                         <select required style="width: 110px;" [attr.id]="'select_ordenes_id'">
-                                            <option *ngFor="let orden of ordenes" [value]="orden.orden">{{orden.orden}}</option>
+                                            <option *ngFor="let orden of ordenes" [value]="orden.orden" >{{orden.orden}}</option>
+                                            <!-- {{orden.orden}}<iron-time datetime="{{fechaEntrega(orden.fecha_entrega)}}" format="dd/mmm/yyyy"></iron-time> -->
+                                            <!-- <iron-time datetime="{{orden.fecha_entrega}}" format="dd/mmm/yyyy"></iron-time> -->
                                         </select>
 
                                         <paper-tooltip position="bottom" for="seleccionar-factura-btn" offset="0">Buscar y seleccionar el o los documentos (XML/PDF) a subir</paper-tooltip>
@@ -144,8 +146,8 @@
                                 <li>Contacte al departamento de adquisiciones del Cimav</li>
                             </ul>
                             <ul *ngIf="hasOrdenes()" class="ul-ayuda">
-                                <li>Se muestran sólo las <strong>órdenes</strong> pendientes de factura (total o parcial)</li>
                                 <li>Seleccione la <strong>Orden de Compra</strong> correspondiente a la factura a subir</li>
+                                <li>Se muestran las <strong>órdenes</strong> pendientes de factura (total o parcial) y las entregadas con un plazo extra de <strong>30 días</strong></li>
                                 <li>Utilice el botón <iron-icon icon="search"></iron-icon><strong>SELLECIONAR</strong> para buscar y seleccionar los archivos <strong>XML</strong> y <strong>PDF</strong> correspondientes a la factura a subir</li>
 <!--                                <li>Capture la <strong>Orden de Compra</strong> correspondiente a la factura (e.g. 1A171036)</li>  -->
                                 <li>A cada archivo <strong>XML</strong> le debe corresponder un archivo <strong>PDF</strong></li>

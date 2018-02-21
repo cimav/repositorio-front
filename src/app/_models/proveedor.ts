@@ -26,6 +26,9 @@ export class Documento {
 
 export class Orden {
     orden: string;
+    status: number;
+    ubicacion: number;
+    fecha_entrega: Date;
 }
 
 /*

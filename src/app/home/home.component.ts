@@ -348,5 +348,10 @@ export class HomeComponent implements OnInit {
         return !isNullOrUndefined(this.ordenes) && this.ordenes.length > 0;
     }
 
+    ordentTxt(orden: Orden) {
+        // TODO formatear
+        return orden.orden + '     ' + new Date(orden.fecha_entrega);
+    }
+
 }
 
