@@ -242,6 +242,7 @@
                             <paper-item class="group-item" *ngFor="let item of uploader.queue; let idx = index">
                                 <span class="primary">{{item?.file?.name}}</span>
                                 <span class="secondary" style="top:-8px;     position: relative;">
+                                    <span class="primary">Seleccionar categoría</span>
                                     <select [disabled]="item.isUploading"  [attr.id]="'categoria_id_' + idx" class="xxform-control" required> <!-- [(ngModel)]="categorias[i]"  -->
                                         <option *ngFor="let catego of categorias | slice:0:(categorias.length-1)" [value]="catego.id">{{catego.categoria}}</option>
                                     </select>
@@ -271,7 +272,7 @@
 
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <span class="panel-title">Documentos</span>
+                            <span class="panel-title">Documentos por categoría</span>
                         </div>
                         <div class="panel-body">
                             <div *ngFor="let cat_id of [1,2,3,4,5,6,7,8]">
