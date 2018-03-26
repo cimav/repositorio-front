@@ -32,6 +32,7 @@
 <paper-toast #toastDeleted id="toastDeleted" text="Documento eliminado"></paper-toast>
 <paper-toast #toastDownloaded id="toastDownloaded" text="Documento descargado"></paper-toast>
 <paper-toast #toastCanceled id="toastCanceled" text="Documento cancelado"></paper-toast>
+<paper-toast #toastMoved id="toastMoved" text="Documento re-asignado"></paper-toast>
 
 <app-drawer-layout fullbleed>
 
@@ -276,14 +277,14 @@
                         </div>
                         <div class="panel-body">
                             <div *ngFor="let cat_id of [1,2,3,4,5,6,7,8]">
-                                <paper-item class="group-item">
+                                <paper-item [myDropTarget]="{cat_id:cat_id}" (myDrop)="onDrop($event)" class="group-item draggable">
                                     <!-- <code>{{txtCatego(cat_id)}}</code> -->
                                     <span class="badge" style="background-color: lightcoral; font-size: 14px;">{{txtCatego(cat_id)}}</span>
                                 </paper-item>
 
                                 <paper-item class="group-item" *ngFor="let docu of currentProveedor.documentos | DocumentoPipe:cat_id; let idx = index">
-                                    <div class="col-sm-offset-0" style="padding-left: 30px;">
-                                        <span class="primary">{{docu.file}}</span>
+                                    <div  class="col-sm-offset-0 drop-target" style="padding-left: 30px;">
+                                        <span [myDraggable]="{doc_id: docu.id, old_cat_id: cat_id}" class="primary">{{docu.file}}</span>
                                         <span  class="secondary" style="top:-8px;     position: relative;">
                                             <paper-icon-button [attr.id]="'view-btn-id-'+ cat_id + '-' +  idx" icon="visibility" style="color: #7a7a7a;" (click)="viewDocu(docu)"></paper-icon-button>
 <!--                                            <paper-icon-button [attr.id]="'download-btn-id-' + cat_id + '-' +  idx" icon="file-download" style="color: #7a7a7a;" (click)="download(docu)"></paper-icon-button> -->

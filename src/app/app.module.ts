@@ -22,6 +22,10 @@ import {UploaderComponent} from "./home/uploader.component";
 import {DocumentoPipe} from "./home/DocumentoPipe";
 import {RegisterComponent} from "./login/register.component";
 
+import {DragService} from "./_services/drag.service";
+import {DraggableDirective} from "./_services/draggable.directive";
+import {DropTargetDirective} from "./_services/drop.target.directive";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +64,8 @@ import {RegisterComponent} from "./login/register.component";
 
     CategoriaPipe,
       DocumentoPipe,
-    FileSelectDirective
+    FileSelectDirective,
+      DraggableDirective, DropTargetDirective
 
   ],
   imports: [
@@ -74,7 +79,7 @@ import {RegisterComponent} from "./login/register.component";
     AuthGuard,
     AlertService,
     AuthenticationService,
-    ProveedorService],
+    ProveedorService, DragService],
     entryComponents: [AppComponent],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

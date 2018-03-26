@@ -127,4 +127,9 @@ export class ProveedorService {
         return this.http.delete(this.config.apiUrl + '/documentos/' + id, this.jwt());
     }
 
+    moveDocumento(id: number, new_cat_id:number) {
+        const url = this.config.apiUrl + '/documentos/move/' + id + '/' + new_cat_id;
+        return this.http.put(url, this.jwt());
+    }
+
 }

@@ -353,5 +353,20 @@ export class HomeComponent implements OnInit {
         return orden.orden + '     ' + new Date(orden.fecha_entrega);
     }
 
+    onDrop(data: any) {
+        console.log('dropped: el ' + data.doc_id + ' de la ' + data.old_cat_id + ' a la ' + data.new_cat_id);
+        if ( data.old_cat_id != data.new_cat_id) {
+            this.proveedorService.moveDocumento(data.doc_id, data.new_cat_id).subscribe(
+                (response: any) => {
+                    // nothing
+                    $('#toastMoved').trigger('show');
+                },
+                error => console.log(error),
+                () => {
+                    console.log("Move documento: " +  data.doc_id);
+                    this.cargarDocumentosOf();
+                }
+            );
+        }
+    }
 }
-
