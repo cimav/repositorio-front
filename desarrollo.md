@@ -57,3 +57,25 @@ https://github.com/vaadin/vaadin-combo-box/issues/405
 sudo bower uninstall vaadin-combo-box paper-elements iron-icons vaadin-date-picker app-layout --allow-root
 sudo bower uninstall iron-overlay-behavior polymer  --allow-root
 sudo npm  uninstall @vaadin/angular2-polymer
+
+
+sudo bower install --save  --allow-root PolymerElements/app-layout#^2.0.0 Vaadin/vaadin-grid#^1.1.0 PolymerElements/iron-flex-layout#^1.3.1 vaadin/tree-grid#^0.7.4 iron-list#^2.0.1 StartPolymer/s-moment#^0.1.1 cloudily/iron-time#^0.1.0 d2l-loading-spinner#^6.0.0 paper-elements#1.0.7
+
+xsudo bower install --save --allow-root paper-elements#1.0.7  app-layout#0.10.6 Vaadin/vaadin-grid#^1.1.0 
+
+sudo npm install -g angular-cli@1.0.0-beta.21 --no-bin-links
+
+  "dependencies": {
+    "paper-elements": "^1.0.7",
+    "app-layout": "PolymerElements/app-layout#^2.0.0",
+    "vaadin-grid": "Vaadin/vaadin-grid#^1.1.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.3.1",
+    "tree-grid": "vaadin/tree-grid#^0.7.4",
+    "iron-list": "^2.0.1",
+    "s-moment": "StartPolymer/s-moment#^0.1.1",
+    "iron-time": "cloudily/iron-time#^0.1.0",
+    "d2l-loading-spinner": "^6.0.0"
+  }
+
+
+sudo bower install --save --allow-root PolymerElements/iron-pages#^1.0.8

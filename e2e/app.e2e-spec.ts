@@ -1,10 +1,10 @@
-import { JwtCPage } from './app.po';
+import { ProveedoresAppPage } from './app.po';
 
-describe('jwt-c App', function() {
-  let page: JwtCPage;
+describe('proveedores-app App', function() {
+  let page: ProveedoresAppPage;
 
   beforeEach(() => {
-    page = new JwtCPage();
+    page = new ProveedoresAppPage();
   });
 
   it('should display message saying app works', () => {

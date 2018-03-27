@@ -44,7 +44,7 @@ import {DropTargetDirective} from "./_services/drop.target.directive";
     PolymerElement('paper-tooltip'),
     PolymerElement('paper-input'),
     PolymerElement('paper-input-container'),
-      PolymerElement('paper-fab'),
+    PolymerElement('paper-fab'),
     PolymerElement('iron-image'),
     PolymerElement('iron-pages'),
     PolymerElement('paper-tab'),
@@ -57,8 +57,6 @@ import {DropTargetDirective} from "./_services/drop.target.directive";
       PolymerElement('iron-icon'),
 
     PolymerElement('d2l-loading-spinner'),
-
-    PolymerElement('vaadin-combo-box'),
 
     PolymerElement('documentos-group'),
 
