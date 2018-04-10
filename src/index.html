@@ -17,11 +17,44 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-    <!-- Styles -->
-    <!--<link rel="import" href="assets/bower_components/iron-flex-layout/iron-flex-layout.html">-->
-    <!--<link rel="import" href="assets/bower_components/paper-styles/color.html">-->
-    <!--<link rel="import" href="assets/bower_components/paper-styles/default-theme.html">-->
-    <!--<link rel="import" href="assets/bower_components/paper-styles/typography.html"> -->
+
+  <!-- Polyfills for older browsers -->
+  <script src="https://unpkg.com/core-js/client/shim.min.js"></script>
+<!--  <script src="https://unpkg.com/zone.js@0.6.25?main=browser"></script> -->
+  <script src="https://unpkg.com/reflect-metadata@0.1.8"></script>
+  <script src="https://unpkg.com/systemjs@0.19.39/dist/system.src.js"></script>
+  <script src="https://cdn.rawgit.com/angular/angular.io/b3c65a9/public/docs/_examples/_boilerplate/systemjs.config.web.js"></script>
+<!--  <script src="https://cdn.rawgit.com/download/polymer-cdn/1.7.0/lib/webcomponentsjs/webcomponents-lite.js"></script> -->
+  <script src="assets/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+  <script type="text/javascript">
+      window.Polymer = window.Polymer || {};
+      window.Polymer.dom = 'shadow';
+  </script>
+  <!--  <link rel="import" href="~/lib/polymer/polymer.html"/> -->
+  <link rel="import" href="assets/bower_components/polymer/polymer.html"/>
+
+  <!--
+  <script>
+      window.Polymer = {
+          dom: 'shadow',
+          lazyRegister: true
+          //dom: 'shady'
+          //dom: 'light'
+      };
+  </script>
+-->
+
+  <script>
+//      System.import('main.ts').catch(function(err){ console.error('Errot al index.39 ', err); });
+  </script>
+
+
+  <!-- Styles -->
+    <link rel="import" href="assets/bower_components/iron-flex-layout/iron-flex-layout.html">
+    <link rel="import" href="assets/bower_components/paper-styles/color.html">
+    <link rel="import" href="assets/bower_components/paper-styles/default-theme.html">
+    <link rel="import" href="assets/bower_components/paper-styles/typography.html">
     <link rel="import" href="assets/bower_components/paper-styles/shadow.html">
 
 <!--  <link rel="import" href="assets/bower_components/vaadin-combo-box/vaadin-combo-box.html"> -->
@@ -138,8 +171,10 @@ paper-tabs .pink paper-tab::shadow #ink {
   </style>
     <!--  wait for the "WebComponentsReady" event before bootstrapping the Angular 2 app. The event is fired after all of the web components have finished registering and are ready to be used. -->
 
+
 </head>
 <body style="    background-color: #F2FAF9;">
-<app-root><p style="top:20px; left;20px;">Cargando aplicación. Espere un momento...</p></app-root>
+  <app-root><p style="top:20px; left;20px;">Cargando aplicación. Espere un momento...</p></app-root>
+  <!-- ajuste -->
 </body>
 </html>
