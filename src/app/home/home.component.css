@@ -243,6 +243,9 @@ input[type="file"] {
   float: right;
 /*  top: 26px; */
 }
+paper-tab {
+  font-size: xx-large;
+}
 paper-button {
   padding: 3px 8px;
   background-color: #80CBC4;
