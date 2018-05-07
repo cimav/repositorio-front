@@ -2,10 +2,14 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
-<label for="rfc_id">Proveedor RFC</label>
-<input type="text" id="rfc_id">
-<input type="submit" value='Ver' onClick="setClave()">
-<strong id="clave_id"></strong>
+<body>
+    <form action="javascript:setClave();" autocomplete="on">
+        <label for="rfc_id">Proveedor RFC</label>
+        <input type="text" id="rfc_id" name="rfc_name" autocomplete="on">
+        <input type="submit" value='Ver' >
+        <strong id="clave_id"></strong>
+    </form>
+</body>
 <script type="text/javascript">
     function setClave() {
         document.getElementById("clave_id").innerHTML = 'buscando....';
