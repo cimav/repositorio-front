@@ -205,7 +205,7 @@ export class HomeComponent implements OnInit {
     }
 
     cargarOrdenesOf() {
-        this.proveedorService.getOrdenesOf(this.currentProveedor.rfc).subscribe(
+        this.proveedorService.getOrdenesOf(this.currentProveedor.id).subscribe(
             (response: Orden[]) => {
                 this.ordenes = response;
             },

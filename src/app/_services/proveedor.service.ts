@@ -34,8 +34,8 @@ export class ProveedorService {
         //.catch(this.handleError);
     }
 
-    public getOrdenesOf =(rfc:string): Observable<Orden[]> => {
-        return this.http.get(this.config.apiUrl + '/proveedores/ordenes/' + rfc,  this.jwt())
+    public getOrdenesOf =(id:number): Observable<Orden[]> => {
+        return this.http.get(this.config.apiUrl + '/proveedores/ordenes/' + id,  this.jwt())
             .map((response: Response) => {
                 return <Orden[]>response.json();
             });
