@@ -15,7 +15,7 @@ export class DocumentoPipe implements PipeTransform {
             return docu.categoria_id == cat_id;
         });
 
-        if (cat_id == 50) {
+        if (cat_id >= 50) {
             filtered.sort((a: Documento, b: Documento) => {
                 if (a.file < b.file) {
                     return -1;

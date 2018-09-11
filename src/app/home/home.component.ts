@@ -11,6 +11,8 @@ import {AppConfig} from "../app.config";
 import {Router, RouterStateSnapshot} from "@angular/router";
 import {environment} from "../../environments/environment";
 
+import {Headers} from '@angular/http';
+
 //const URL = 'http://localhost:3000/documentos';
 
 @Component({
@@ -47,6 +49,10 @@ export class HomeComponent implements OnInit {
     groupMap = {};
     //distintos: string[] =[];
     facturas: Documento[] = [];
+
+    tipoFacturaComplemento: number = 50;
+
+    sort_by_fecha: boolean = true;
 
     constructor(private proveedorService: ProveedorService, public config: AppConfig, private router: Router) {
         //this.currentProveedor = JSON.parse(localStorage.getItem('currentProveedor'));
@@ -90,15 +96,26 @@ export class HomeComponent implements OnInit {
 
         /* XML */
         this.uploaderFactura.onAfterAddingFile = (file) => {
+
+            file.headers['proveedor_id'] = this.currentProveedor.id;
+            file.headers['categoria_id'] = this.tipoFacturaComplemento;
+            this.ordenCompra =  $('#' + 'select_ordenes_id').val() ;
+            file.headers['orden_compra'] = this.ordenCompra;
+
             file.withCredentials = false;
         };
         this.uploaderFactura.onBuildItemForm = (item: FileItem, form) => {
+
             form.append("documento[proveedor_id]", this.currentProveedor.id);
-            form.append("documento[categoria_id]", 50);
+            form.append("documento[categoria_id]", this.tipoFacturaComplemento);
             form.append("documento[orden_compra]", this.ordenCompra);
             form.append("commit", "Save");
         };
         this.uploaderFactura.onCompleteItem = (item: FileItem, response: any, status: any, headers: any) => {
+
+            console.log('item> ', item);
+            console.log('headers> ', headers);
+
             item.remove();
             $('#toastUploaded').trigger('show');
             this.cargarDocumentosOf();
@@ -108,8 +125,10 @@ export class HomeComponent implements OnInit {
             this.cargarDocumentosOf();
         };
 
+        this.tipoFacturaComplemento = 50;
 
     }
+
 /*
     cargarDocumentos() {
         this.proveedorService.getByRfc(this.currentProveedorToken.rfc).subscribe(
@@ -136,7 +155,7 @@ export class HomeComponent implements OnInit {
 
                 this.cargarOrdenesOf();
 
-                this.cargarFacturas();
+                this.cargarFacturas(this.sort_by_fecha);
             },
             error => {
                 console.log(error);
@@ -156,19 +175,38 @@ export class HomeComponent implements OnInit {
             (response: Documento[]) => {
                 this.currentProveedor.documentos = response;
 
-                this.cargarFacturas();
+                this.cargarFacturas(this.sort_by_fecha);
             },
             error => console.log(error),
             () => {}
         );
     }
 
-    cargarFacturas() {
+    reordenar() {
+        this.sort_by_fecha = !this.sort_by_fecha;
+        this.cargarFacturas(this.sort_by_fecha);
+    }
+
+    cargarFacturas(sort_by_fecha) {
         this.facturas = this.currentProveedor.documentos.filter((docu) => {
-            return docu.categoria_id == 50;
+            return docu.categoria_id >= 50;
         });
         this.facturas = this.facturas.sort(function(f1,f2) {
-            return (f1.orden_compra > f2.orden_compra) ? 1 : ((f2.orden_compra > f1.orden_compra) ? -1 : 0);
+            // return (f1.orden_compra > f2.orden_compra) ? 1 : ((f2.orden_compra > f1.orden_compra) ? -1 : 0);
+
+            if (f1.orden_compra > f2.orden_compra) return -1;
+            if (f1.orden_compra < f2.orden_compra) return 1;
+
+            if (sort_by_fecha) {
+                if (f1.created_at > f2.created_at) return -1;
+                if (f1.created_at < f2.created_at) return 1;
+            } else {
+                if (f1.file < f2.file) return -1;
+                if (f1.file > f2.file) return 1;
+            }
+            return 0;
+
+
         });
 
         var ddss:string[] = [];
@@ -230,6 +268,8 @@ export class HomeComponent implements OnInit {
         var url = this.config.apiUrlDocus + "/" +this.currentProveedor.rfc + "/";
         if (docu.categoria_id == 50) {
             url = url + "facturas/" + docu.orden_compra + "/" + docu.file;
+        } else if (docu.categoria_id == 51) {
+            url = url + "complementos/" + docu.orden_compra + "/" + docu.file;
         } else {
             url = url + docu.categoria_id + "/" + docu.file;
         }
@@ -338,6 +378,16 @@ export class HomeComponent implements OnInit {
         }
         let catego = this.categorias.find(c => c.id == id);
        return catego.categoria;
+    }
+
+    txtFactComple(id) {
+        if (id == 50) {
+            return "Factura";
+        } else if (id == 51) {
+            return "Complemento";
+        } else {
+            return "Desconocido";
+        }
     }
 
     selectedOrdenChange(event) {

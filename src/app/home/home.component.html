@@ -110,17 +110,24 @@
                                     <label *ngIf="!hasOrdenes()">No tiene órdenes de compra (o se están cargando)</label>
                                     <ng-container *ngIf="hasOrdenes()">
                                         <label>Seleccione orden</label>
-                                        <select required style="width: 110px;" [attr.id]="'select_ordenes_id'">
-                                            <option *ngFor="let orden of ordenes" [value]="orden.orden" >{{orden.orden}}</option>
+                                        <select required style="width: 110px;" [attr.id]="'select_ordenes_id'" >
+                                            <option  *ngFor="let orden of ordenes" [value]="orden.orden"  >{{orden.orden}}</option>
                                             <!-- {{orden.orden}}<iron-time datetime="{{fechaEntrega(orden.fecha_entrega)}}" format="dd/mmm/yyyy"></iron-time> -->
                                             <!-- <iron-time datetime="{{orden.fecha_entrega}}" format="dd/mmm/yyyy"></iron-time> -->
                                         </select>
+                                        <span style="padding-left: 20px; display: inline-flex;">
+                                            <label style="padding-right: 14px;" ><input type="radio" name="fact_comple" [(ngModel)]="tipoFacturaComplemento" value=50 checked> Factura</label>
+                                            <label><input type="radio" name="fact_comple" [(ngModel)]="tipoFacturaComplemento" value=51 > Complemento</label>
+                                        </span>
 
                                         <paper-tooltip position="bottom" for="seleccionar-factura-btn" offset="0">Buscar y seleccionar el o los documentos (XML/PDF) a subir</paper-tooltip>
                                         <paper-button raised id="seleccionar-factura-btn" onclick="document.querySelector('#uploader_factura_id').click();" >
                                             <iron-icon icon="search"></iron-icon>
                                             Seleccionar Archivos
                                         </paper-button>
+
+                                        <div><code style ="text-align: justify;">Estimado proveedor, a efecto de cumplir con lo establecido  en las disposiciones en materia fiscal vigentes, es un requisito indispensable sea emitido el <strong>complemento de pago</strong> cuando así corresponda y depositarlo en la carpeta correspondiente del repositorio CIMAV; en caso contrario no se dará tramite a pagos subsecuentes</code></div>
+
                                     </ng-container>
 
                                 </paper-item>
@@ -129,7 +136,9 @@
 
                             <paper-item class="group-item" *ngFor="let item of uploaderFactura.queue; let idx = index">
                                 <code>{{item?.file?.type?.split('/')[1]?.toUpperCase()}}</code>
-                                <span class="primary">{{item?.file?.name}}</span>
+                                <!-- <code>{{item?.headers['orden_compra']}}</code>
+                                <code>{{txtFactComple(item?.headers['categoria_id'])}}</code> -->
+                                <em class="primary">{{item?.file?.name}}</em>
                                 <span class="secondary" style="top:-8px;     position: relative;">
                                     <d2l-loading-spinner *ngIf="item.isUploading" size="30" color="#37474F" class="padding" style="top: 10px; position: relative;" ></d2l-loading-spinner>
                                     <paper-icon-button *ngIf="!item.isUploading" class="btn-depende-orden" [attr.id]="'upload-factura-btn-id-' + idx" [disabled]=!facturaForm.form.valid icon="cloud-upload" style="color: #7a7a7a;" (click)="uploadFacturaItem(item)"></paper-icon-button>
@@ -147,12 +156,13 @@
                                 <li>Contacte al departamento de adquisiciones del Cimav</li>
                             </ul>
                             <ul *ngIf="hasOrdenes()" class="ul-ayuda">
-                                <li>Seleccione la <strong>Orden de Compra</strong> correspondiente a la factura a subir</li>
+                                <li>Seleccione la <strong>Orden de Compra</strong> correspondiente a la factura o complemento a subir</li>
+                                <li>Seleccione si es <strong>factura</strong> o <strong>complemento</strong></li>
                                 <li>Se muestran las <strong>órdenes</strong> pendientes de factura (total o parcial) y las entregadas con un plazo extra de <strong>30 días</strong></li>
                                 <li>Utilice el botón <iron-icon icon="search"></iron-icon><strong>SELLECIONAR</strong> para buscar y seleccionar los archivos <strong>XML</strong> y <strong>PDF</strong> correspondientes a la factura a subir</li>
 <!--                                <li>Capture la <strong>Orden de Compra</strong> correspondiente a la factura (e.g. 1A171036)</li>  -->
                                 <li>A cada archivo <strong>XML</strong> le debe corresponder un archivo <strong>PDF</strong></li>
-                                <li>Se despliega una lista de archivos (facturas) listos para subir y todos correspondientes a la misma orden capturada</li>
+                                <li><code>Se despliega una lista de archivos (facturas) listos para subir y todos correspondientes a la misma orden capturada y del mismo tipo (factura o complemento)</code></li>
                                 <li>Las <strong>Ordenes</strong> pueden ser parciales; es decir, tener más de una factura</li>
                                 <li>Utilice el icono <iron-icon icon="cloud-upload"></iron-icon> para subir el archivo</li>
                                 <li>Utilice el icono <iron-icon icon="clear"></iron-icon> para cancelar el archivo</li>
@@ -161,38 +171,33 @@
                         </div>
                     </div>
 
-                    <div *ngFor="let cat_id of [50]">
+                    <div > <!-- *ngFor="let cat_id of [50]" -->
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <span class="panel-title">Facturas</span>
+                                <span class="panel-title">Facturas y Complementos</span>
+                                <label style="float:right;"><input style="margin-right: 5px;" type="checkbox" [checked]="sort_by_fecha" (change)="reordenar()" />Ordenar por fecha</label>
+
                             </div>
                             <div class="panel-body">
-                                <!--
-                                <paper-item class="group-item" *ngFor="let docu of currentProveedor.documentos | DocumentoPipe:cat_id; let idx = index">
-                                    <code style="white-space: pre;">{{formatOrdenCompra(docu.orden_compra)}}</code>
-                                    <code *ngIf="docu.file.toLowerCase().indexOf('.xml')>0"><strong>XML</strong></code>
-                                    <code *ngIf="docu.file.toLowerCase().indexOf('.pdf')>0">PDF</code>
-                                    <span class="primary">{{docu.file}}</span>
-                                    <span class="secondary" style="top:-8px;     position: relative;">
-                                        <paper-tooltip position="top" [attr.for]="'download-btn-id-' + cat_id + '-' + idx" offset="0">Bajar el documento desde el repositorio al disco local</paper-tooltip>
-                                        <paper-icon-button [attr.id]="'download-btn-id-' + cat_id + '-' +  idx" icon="file-download" style="color: #7a7a7a;"
-                                                           (click)="download(docu)"></paper-icon-button>
-                                        <paper-tooltip position="top" [attr.for]="'delete-btn-id-' + cat_id + '-' + idx"
-                                                       offset="0">Eliminar el documento del repositorio</paper-tooltip>
-                                        <paper-icon-button [attr.id]="'delete-btn-id-' + cat_id + '-' + idx" icon="delete" style="color: #7a7a7a;"
-                                                           (click)="deleteDocumentoDlg(docu)"></paper-icon-button>
-                                    </span>
-                                    <span class="secondary"><iron-time datetime="{{docu.updated_at}}" format="dd/mmm/yyyy"></iron-time></span>
-                                </paper-item>
-                                -->
 
                                 <ng-container class="group-item" *ngFor="let factura of facturas; let idx = index">
+
                                     <paper-item class="group-item" *ngIf="hasGroup(idx)">
                                         <span class="badge" style="background-color: lightcoral; font-size: 14px;">{{factura.orden_compra}}</span>
                                     </paper-item>
-                                    <paper-item class="group-item" style="padding-left: 40px;">
+
+                                    <!--
+                                    <paper-item class="group-item">
+                                        <span class="badge" style="background-color: #00AA8D; font-size: 14px;">{{txtCatego(51)}}</span>
+                                    </paper-item>
+                                    -->
+
+                                    <!-- <paper-item class="group-item" *ngFor="let docu of currentProveedor.documentos | DocumentoPipe:cat_id; let idx = index"> -->
+
+                                    <paper-item class="group-item" style="padding-left: 40px;" >
                                         <span class="badge" style="background-color: #80CBC4;" *ngIf="factura.file.toLowerCase().indexOf('.xml')>0">XML</span>
                                         <span class="badge" style="background-color: #80CBC4;" *ngIf="factura.file.toLowerCase().indexOf('.pdf')>0">PDF</span>
+                                        <span class="badge" style="background-color: #80CBC4;">{{txtFactComple(factura.categoria_id)}}</span>
                                         <span class="primary">{{factura.file}}</span>
                                         <span class="secondary" style="top:-8px;     position: relative;"> <!-- *ngIf="config.asAdmin"  -->
                                             <paper-icon-button [attr.id]="'view-btn-id-50' + '-' +  idx" icon="visibility" style="color: #7a7a7a;" (click)="viewDocu(factura)"></paper-icon-button>
@@ -205,6 +210,7 @@
                                         </span>
                                         <span class="secondary"><iron-time datetime="{{factura.updated_at}}" format="dd/mmm/yyyy"></iron-time></span>
                                     </paper-item>
+
                                 </ng-container>
 
                             </div>
@@ -291,7 +297,6 @@
                                         <span [myDraggable]="{doc_id: docu.id, old_cat_id: cat_id}" class="primary">{{docu.file}}</span>
                                         <span  class="secondary" style="top:-8px;     position: relative;">
                                             <paper-icon-button [attr.id]="'view-btn-id-'+ cat_id + '-' +  idx" icon="visibility" style="color: #7a7a7a;" (click)="viewDocu(docu)"></paper-icon-button>
-<!--                                            <paper-icon-button [attr.id]="'download-btn-id-' + cat_id + '-' +  idx" icon="file-download" style="color: #7a7a7a;" (click)="download(docu)"></paper-icon-button> -->
                                             <paper-icon-button *ngIf="config.asAdmin" [attr.id]="'delete-btn-id-' + cat_id + '-' + idx" icon="delete" style="color: #7a7a7a;" (click)="deleteDocumentoDlg(docu)"></paper-icon-button>
 
                                             <paper-tooltip position="top" [attr.for]="'view-btn-id-' + cat_id + '-' + idx" offset="0">Ver el documento</paper-tooltip>
@@ -307,31 +312,6 @@
                     </div>
 
 
-<!--
-                    <div *ngFor="let cat_id of [1,2,3]">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <span class="panel-title">Panel {{cat_id}}</span>
-                            </div>
-                            <div class="panel-body">
-                                <paper-item class="group-item" *ngFor="let docu of currentProveedor.documentos | DocumentoPipe:cat_id; let idx = index">
-                                    <span class="primary">{{docu.file}}</span>
-                                    <span class="secondary" style="top:-8px;     position: relative;">
-                                        <paper-tooltip position="top" [attr.for]="'download-btn-id-' + cat_id + '-' + idx" offset="0">Bajar el documento desde el repositorio al disco local</paper-tooltip>
-                                        <paper-icon-button [attr.id]="'download-btn-id-' + cat_id + '-' +  idx" icon="file-download" style="color: #7a7a7a;"
-                                                           (click)="download(docu)"></paper-icon-button>
-                                        <paper-tooltip position="top" [attr.for]="'delete-btn-id-' + cat_id + '-' + idx"
-                                                       offset="0">Eliminar el documento del repositorio</paper-tooltip>
-                                        <paper-icon-button [attr.id]="'delete-btn-id-' + cat_id + '-' + idx" icon="delete" style="color: #7a7a7a;"
-                                                           (click)="deleteDocumentoDlg(docu)"></paper-icon-button>
-                                    </span>
-                                    <span class="secondary"><iron-time datetime="{{docu.updated_at}}" format="dd/mmm/yyyy"></iron-time></span>
-                                </paper-item>
-                            </div>
-                        </div>
-                    </div>
-
--->
                 </div>
 
 
